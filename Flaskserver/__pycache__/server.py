@@ -197,7 +197,7 @@ def extracted_text():
     file = request.get_json()
     subject = file.get("Subject")
     base_string = file.get('ImageBase64String')
-
+    print(base_string)
     # Add padding to the Base64 string if needed
     base_string += '=' * (-len(base_string) % 4)
     # print(base_string)
