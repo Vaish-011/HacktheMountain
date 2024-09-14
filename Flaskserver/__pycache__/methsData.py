@@ -31,7 +31,7 @@ def MathsData(paragraph, TotalMathsMergedData, quetionsFile, formOfDocument):
         most_similar_chapter, similarity_score = check_paragraph_similarity(paragraph, df)
 
         if similarity_score > 0.5:
-            
+            print(f"The paragraph is similar to {most_similar_chapter} with a similarity score of {similarity_score:.2f}.")
 
             dframe = pd.read_csv(quetionsFile)
 
@@ -42,6 +42,9 @@ def MathsData(paragraph, TotalMathsMergedData, quetionsFile, formOfDocument):
             quetion_Image = chapter_allQuestions['questionImage'].tolist()
             ans = chapter_allQuestions['ans'].tolist()
 
+            
+
+            # Convert the arrays to lists and return them
             result = {"quetion_Image": quetion_Image, "ans": ans}
             return result
         else:
@@ -50,12 +53,12 @@ def MathsData(paragraph, TotalMathsMergedData, quetionsFile, formOfDocument):
     else:
         df = pd.read_csv(TotalMathsMergedData)
         df['Tokens'] = df['Tokens'].astype(str)
-
-        ExtractedText = ""  
+        # function call of image to text
+        ExtractedText = ""  # Replace with actual extracted text
         most_similar_chapter, similarity_score = check_paragraph_similarity(ExtractedText, df)
 
         if similarity_score > 0.5:
-            # print(f"The paragraph is similar to Chapter {most_similar_chapter} with a similarity score of {similarity_score:.2f}.")
+            print(f"The paragraph is similar to Chapter {most_similar_chapter} with a similarity score of {similarity_score:.2f}.")
             dframe = pd.read_csv(quetionsFile)
             chapter_allQuestions = dframe[dframe['chapter'] == most_similar_chapter]
             quetion_Image = chapter_allQuestions['questionImage'].tolist()
@@ -65,5 +68,5 @@ def MathsData(paragraph, TotalMathsMergedData, quetionsFile, formOfDocument):
             result = {"quetion_Image": quetion_Image, "ans": ans}
             return result
         else:
-            
-            return "paragraph is not similiar to any given data"
+            print("The paragraph is not similar to any chapter.")
+            return "invalid Text"
