@@ -66,4 +66,4 @@ def MathsData(paragraph, TotalMathsMergedData, quetionsFile, formOfDocument):
             return result
         else:
             
-            return "peragraph is not similiar to any given data"
+            return "paragraph is not similiar to any given data"
