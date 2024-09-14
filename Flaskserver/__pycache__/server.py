@@ -21,32 +21,109 @@ def get_example():
     }
     return jsonify(data)
   
-  
+import pandas as pd
+import random
+
+def get_random_questions(exam_type):
+    """Fetch random questions from the respective CSV files based on the exam type."""
+    question_files = []
+    
+    try:
+        if exam_type == 'jee':
+            # Load the CSV files for JEE
+            chem_df = pd.read_csv(r'csvFiles\Jee_chem.csv')
+            phy_df = pd.read_csv(r'csvFiles\Jee_physics.csv')
+            math_df = pd.read_csv(r'csvFiles\Final_Maths_Jee.csv')
+            question_files = [chem_df, phy_df, math_df]
+        elif exam_type == 'neet':
+            # Load the CSV files for NEET
+            bio_df = pd.read_csv(r'csvFiles\Neet_BIo.csv')
+            phy_df1 = pd.read_csv(r'csvFiles\Neet_phy.csv')
+            chem_df1 = pd.read_csv(r'csvFiles\Neet_chem.csv')
+            question_files = [bio_df, phy_df1, chem_df1]
+        else:
+            return None, None
+
+        # Select one random question from each file
+        questions = []
+        solutions = []
+        for df in question_files:
+            if df.empty:
+                print("One of the DataFrames is empty.")
+                continue
+
+            try:
+                # Randomly select a question
+                selected_row = df.sample(1).iloc[0]
+                if exam_type == 'jee':
+                    if df.equals(math_df):
+                        question_base64 = selected_row['questionImage']
+                        solution_base64 = selected_row['ans']
+                    else:
+                        question_base64 = selected_row['image']
+                        solution_base64 = selected_row['ans']
+                else:
+                    question_base64 = selected_row['image']
+                    solution_base64 = selected_row['ans']
+
+  # Convert any non-serializable types to serializable ones
+                questions.append(str(question_base64))
+                solutions.append(str(solution_base64))
+            except Exception as e:
+                print(f"Error processing DataFrame: {e}")
+
+        if not questions:
+            print("No questions were retrieved.")
+            return None, None
+        
+        return questions, solutions
+    except Exception as e:
+        print(f"Error fetching questions: {e}")
+        return None, None
 
 
+@app.route('/get-questions', methods=['GET'])
+def get_questions():
+    try:
+        # Get the exam type from the request parameters (either 'jee' or 'neet')
+        exam_type = request.args.get('examType', '').lower()
+
+        if exam_type not in ['jee', 'neet']:
+            return jsonify({"error": "Invalid exam type. Please specify either 'jee' or 'neet'."}), 400
+
+        # Get random questions and solutions
+        questions, solutions = get_random_questions(exam_type)
+
+        if questions is None or solutions is None:
+            return jsonify({"error": "Could not retrieve questions."}), 500
+
+        # Return the list of base64 questions and solutions as a JSON response
+        return jsonify({"questions": questions, "solutions": solutions, "status": "success"}), 200
+
+    except Exception as e:
+        print(f"Error in /get-questions route: {e}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
 @app.route('/Jee_Maths', methods=['POST'])
 def methsData():
     try:
-        # Retrieve the paragraph, files, and formOfDocument
+        
         data = request.get_json()
         paragraph = data.get('paragraph', '')
         formOfDocument = int(data.get('formOfDocument', 0))
         quetionsFile = 'csvFiles/Final_Maths_Jee.csv'
         TotalMathsMergedData = 'csvFiles/TotalMathsMergedData.csv'
 
-        # Call MathsData function with the inputs
         result = MathsData(paragraph=paragraph, TotalMathsMergedData=TotalMathsMergedData, quetionsFile=quetionsFile, formOfDocument=formOfDocument)
 
-        # If MathsData returns a result, include it in the response
         return jsonify({"message": "Data processed successfully!", "result": result}), 200
 
     except Exception as e:
-        # Catch and log any errors that occur
+
         print("Error in processing:", e)
         return jsonify({"error": "Failed to process data"}), 500
 @app.route('/Jee_Chemistry',methods=['POST'])
 def chemData():
-    file = "D:\\hackethon_2\\csvFiles\\Jc.csv"
+    file = "D:\\\csvFiles\\Jc.csv"
     posted_data = request.get_json()
 
     paragraph = posted_data['text']
@@ -56,7 +133,7 @@ def chemData():
 
 @app.route('/Jee_Physics',methods=['POST'])
 def phyData():
-    file = "D:\\hackethon_2\\csvFiles\\Jp.csv"
+    file = "D:\\\csvFiles\\Jp.csv"
     posted_data = request.get_json()
 
     paragraph = posted_data['text']
@@ -67,7 +144,7 @@ def phyData():
 def bioData():
 
 
-    file = "D:\\hackethon_2\\csvFiles\\Nb.csv"
+    file = "D:\\\csvFiles\\Nb.csv"
 
     
     posted_data = request.get_json()
@@ -82,7 +159,7 @@ def chemNEETData():
 
 
     
-    file = "D:\\hackethon_2\\csvFiles\\Nc.csv"
+    file = "D:\\\csvFiles\\Nc.csv"
 
     
     posted_data = request.get_json()
@@ -96,7 +173,7 @@ def chemNEETData():
 def phyNEETData():
 
    
-    file = "D:\\hackethon_2\\csvFiles\\Np.csv"
+    file = "D:\\\csvFiles\\Np.csv"
 
     posted_data = request.get_json()
 
@@ -128,22 +205,22 @@ def extracted_text():
         result = main(base_string)
         # print(type(result))
         if subject=="Jc":
-            filePath = "D:\\hackethon_2\\csvFiles\\Jc.csv"
+            filePath = "D:\\\csvFiles\\Jc.csv"
             return chem_data(filePath,result)
         elif subject=="Jp":
-            filePath = "D:\\hackethon_2\\csvFiles\\Jp.csv"
+            filePath = "D:\\\csvFiles\\Jp.csv"
             return phy_data(filePath,str(result))
         elif subject=="Nb":
-            filePath = "D:\\hackethon_2\\csvFiles\\Nb.csv"
+            filePath = "D:\\\csvFiles\\Nb.csv"
             return bio_data(filePath,str(result))
         elif subject=="Nb":
-            filePath = "D:\\hackethon_2\\csvFiles\\Nc.csv"
+            filePath = "D:\\\csvFiles\\Nc.csv"
             return chem_NEET_data(filePath,str(result))
         elif subject=="Nb":
-            filePath = "D:\\hackethon_2\\csvFiles\\Np.csv"
+            filePath = "D:\\\csvFiles\\Np.csv"
             return phy_NEET_data(filePath,str(result))
         elif subject=="Nb":
-            filePath = "D:\\hackethon_2\\csvFiles\\Jm.csv"
+            filePath = "D:\\\csvFiles\\Jm.csv"
             return MathsData(filePath,str(result))
         else:
             return jsonify({"Sorry yarr kuch nhi h!!"}, 404) 
