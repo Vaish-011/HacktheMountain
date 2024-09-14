@@ -123,7 +123,7 @@ def methsData():
         return jsonify({"error": "Failed to process data"}), 500
 @app.route('/Jee_Chemistry',methods=['POST'])
 def chemData():
-    file = "D:\\\csvFiles\\Jc.csv"
+    file = r"csvFiles\Jc.csv"
     posted_data = request.get_json()
 
     paragraph = posted_data['text']
@@ -133,7 +133,7 @@ def chemData():
 
 @app.route('/Jee_Physics',methods=['POST'])
 def phyData():
-    file = "D:\\\csvFiles\\Jp.csv"
+    file = r"csvFiles\Jp.csv"
     posted_data = request.get_json()
 
     paragraph = posted_data['text']
@@ -144,7 +144,7 @@ def phyData():
 def bioData():
 
 
-    file = "D:\\\csvFiles\\Nb.csv"
+    file = r"csvFiles\Nb.csv"
 
     
     posted_data = request.get_json()
@@ -159,7 +159,7 @@ def chemNEETData():
 
 
     
-    file = "D:\\\csvFiles\\Nc.csv"
+    file = r"csvFiles\Nc.csv"
 
     
     posted_data = request.get_json()
@@ -173,7 +173,7 @@ def chemNEETData():
 def phyNEETData():
 
    
-    file = "D:\\\csvFiles\\Np.csv"
+    file = r"csvFiles\Np.csv"
 
     posted_data = request.get_json()
 
@@ -205,22 +205,22 @@ def extracted_text():
         result = main(base_string)
         # print(type(result))
         if subject=="Jc":
-            filePath = "D:\\\csvFiles\\Jc.csv"
+            filePath = r"csvFiles\Jc.csv"
             return chem_data(filePath,result)
         elif subject=="Jp":
-            filePath = "D:\\\csvFiles\\Jp.csv"
+            filePath = r"csvFiles\Jp.csv"
             return phy_data(filePath,str(result))
         elif subject=="Nb":
-            filePath = "D:\\\csvFiles\\Nb.csv"
+            filePath = r"csvFiles\Nb.csv"
             return bio_data(filePath,str(result))
-        elif subject=="Nb":
-            filePath = "D:\\\csvFiles\\Nc.csv"
+        elif subject=="Nc":
+            filePath = r"csvFiles\Nc.csv"
             return chem_NEET_data(filePath,str(result))
-        elif subject=="Nb":
-            filePath = "D:\\\csvFiles\\Np.csv"
+        elif subject=="Np":
+            filePath = r"csvFiles\Np.csv"
             return phy_NEET_data(filePath,str(result))
-        elif subject=="Nb":
-            filePath = "D:\\\csvFiles\\Jm.csv"
+        elif subject=="Jm":
+            filePath = r"csvFiles\Jm.csv"
             return MathsData(filePath,str(result))
         else:
             return jsonify({"Sorry yarr kuch nhi h!!"}, 404) 
