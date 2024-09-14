@@ -3,7 +3,6 @@ import io
 import os
 from PIL import Image
 from textextract import TextExtractor, OS
-
 def fix_base64_padding(base64_string: str) -> str:
     """Add padding to the base64 string if necessary."""
     missing_padding = len(base64_string) % 4
