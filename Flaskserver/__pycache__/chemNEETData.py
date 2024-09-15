@@ -3,6 +3,7 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
+import json
 
 def chem_NEET_data(file , paragraph):
  
@@ -10,10 +11,10 @@ def chem_NEET_data(file , paragraph):
     # Load the CSV file
     df = pd.read_csv(file)
     
-    # Extract necessary columns
-    questions = df['question']
-    images = df['image']
-    answers = df['ans']
+    # Extract necessary columns()
+    questions = df['question'].tolist()
+    images = df['image'].tolist()
+    answers = df['ans'].tolist()
    
     # Preprocess the input text and questions
     def preprocess(text):
