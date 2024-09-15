@@ -225,7 +225,7 @@ def extracted_text():
         elif subject=="Jm":
             filePath = r"csvFiles\Jm.csv"
             TotalMathsMergedData  =r"csvFiles\TotalMathsMergedData.csv"
-            return MathsData(quetionsFile=filePath,paragraph=result , TotalMathsMergedData=TotalMathsMergedData, formOfDocument='0')
+            return MathsData(quetionsFile=filePath,paragraph=result , TotalMathsMergedData=TotalMathsMergedData, formOfDocument='1sd')
         else:
             return jsonify({"Sorry yarr kuch nhi h!!"}, 404) 
        

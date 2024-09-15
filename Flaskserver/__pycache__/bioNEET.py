@@ -44,7 +44,6 @@ def bio_data(file , paragraph):
             suggestions.append({
                 "question": question,
                 "ans": answers[index],
-                "score": score,
                 "image": images[index]
             })
 
