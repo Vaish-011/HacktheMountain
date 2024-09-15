@@ -197,31 +197,35 @@ def extracted_text():
     file = request.get_json()
     subject = file.get("Subject")
     base_string = file.get('ImageBase64String')
-    print(base_string)
+    # print(base_string)
     # Add padding to the Base64 string if needed
     base_string += '=' * (-len(base_string) % 4)
     # print(base_string)
     try:
+        
         result = main(base_string)
+        if not isinstance(result, str):
+            result = str(result)
         # print(type(result))
         if subject=="Jc":
             filePath = r"csvFiles\Jc.csv"
             return chem_data(filePath,result)
         elif subject=="Jp":
             filePath = r"csvFiles\Jp.csv"
-            return phy_data(filePath,str(result))
+            return phy_data(filePath,result)
         elif subject=="Nb":
             filePath = r"csvFiles\Nb.csv"
-            return bio_data(filePath,str(result))
+            return bio_data(filePath,result)
         elif subject=="Nc":
             filePath = r"csvFiles\Nc.csv"
-            return chem_NEET_data(filePath,str(result))
+            return chem_NEET_data(filePath,result)
         elif subject=="Np":
             filePath = r"csvFiles\Np.csv"
-            return phy_NEET_data(filePath,str(result))
+            return phy_NEET_data(filePath,result)
         elif subject=="Jm":
             filePath = r"csvFiles\Jm.csv"
-            return MathsData(filePath,str(result))
+            TotalMathsMergedData  =r"csvFiles\TotalMathsMergedData.csv"
+            return MathsData(quetionsFile=filePath,paragraph=result , TotalMathsMergedData=TotalMathsMergedData, formOfDocument='0')
         else:
             return jsonify({"Sorry yarr kuch nhi h!!"}, 404) 
        

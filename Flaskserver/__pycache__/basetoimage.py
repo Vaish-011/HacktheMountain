@@ -2,6 +2,7 @@ import base64
 import io
 import os
 from PIL import Image
+from flask import jsonify
 from textextract import TextExtractor, OS
 def fix_base64_padding(base64_string: str) -> str:
     """Add padding to the base64 string if necessary."""
@@ -53,6 +54,8 @@ def main(base64_string: str) -> str:
     # Extract text from the image
     try:
         extracted_text = extractor.extract_text(image_path)
+        if not isinstance(extracted_text, str):
+            extracted_text = str(extracted_text)
     except Exception as e:
         print(f"Error extracting text: {e}")
         return ""
